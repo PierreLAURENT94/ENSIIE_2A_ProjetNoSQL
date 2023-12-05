@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: streamlit run app/app.py --server.port 8080
+    volumes:
+      - ./app/:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - postgres
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    ports:
+      - "5432:5432"
+  
+  adminer:
+    image: adminer
+    ports:
+      - "8050:8080"
