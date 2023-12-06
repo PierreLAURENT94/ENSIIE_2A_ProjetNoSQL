@@ -60,10 +60,10 @@ def getMatiereByIdMongoDB(id):
 
 # Streamlit
 
-tabEnregistrerEleve, tabListeEleve, tabEnregistrerMatiere, tabListeMatiere = st.tabs(["Enregistrer un Élève", "Liste des Élèves", "Enregistrer une Matière", "Liste des Matières"])
+tabEnregistrerEleve, tabListeEleve, tabEnregistrerMatiere, tabListeMatiere = st.tabs(["Enregistrer un Résultat", "Liste des Résultats", "Enregistrer une Matière", "Liste des Matières"])
 
 with tabEnregistrerEleve:
-    st.title("Enregistrer un Élève")
+    st.title("Enregistrer un Résultat")
     nom = st.text_input("Nom :")
     prenom = st.text_input("Prénom :")
     note = st.slider('Note :', 0, 20, 10)
@@ -79,29 +79,40 @@ with tabEnregistrerEleve:
 
     with colEnregistrerMongoDB:
         if st.button("Enregistrer sur MongoDB", type="secondary", use_container_width=True):
-            eleveMongoDB = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matiereMongoDB.split(":")[0]}
-            addEleveMongoDB(eleveMongoDB)
-            st.success("Profil de l'élève enregistré sur MongoDB", icon="✅")
-            st.balloons()
+            if matiereMongoDB != None:
+                eleveMongoDB = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matiereMongoDB.split(":")[0]}
+                addEleveMongoDB(eleveMongoDB)
+                st.success("Résultat de l'élève enregistré sur MongoDB", icon="✅")
+                st.balloons()
+            else:
+                st.error('Veuillez sélectionner une "Matière MongoDB"', icon="🚨")
     
     with colEnregistrerLesDeux:
         if st.button("Enregistrer sur les deux", type="primary", use_container_width=True):
-            eleveMongoDB = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matiereMongoDB.split(":")[0]}
-            elevePostgreSQL = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matierePostgreSQL.split(":")[0]}
-            addEleveMongoDB(eleveMongoDB)
-            addElevePostgreSQL(elevePostgreSQL)
-            st.success("Profil de l'élève enregistré sur MongoDB et PostgreSQL", icon="✅")
-            st.snow()
+            if matiereMongoDB == None:
+                st.error('Veuillez sélectionner une "Matière MongoDB"', icon="🚨")
+            elif matierePostgreSQL == None:
+                st.error('Veuillez sélectionner une "Matière PostgreSQL"', icon="🚨")
+            else:
+                eleveMongoDB = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matiereMongoDB.split(":")[0]}
+                elevePostgreSQL = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matierePostgreSQL.split(":")[0]}
+                addEleveMongoDB(eleveMongoDB)
+                addElevePostgreSQL(elevePostgreSQL)
+                st.success("Résultat de l'élève enregistré sur MongoDB et PostgreSQL", icon="✅")
+                st.snow()
 
     with colEnregistrerPostgreSQL:
         if st.button("Enregistrer sur PostgreSQL", type="secondary", use_container_width=True):
-            elevePostgreSQL = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matierePostgreSQL.split(":")[0]}
-            addElevePostgreSQL(elevePostgreSQL)
-            st.success("Profil de l'élève enregistré sur PostgreSQL", icon="✅")
-            st.balloons()  
+            if matierePostgreSQL != None:
+                elevePostgreSQL = {'nom': nom, 'prenom': prenom, 'note': note, 'matiere_id': matierePostgreSQL.split(":")[0]}
+                addElevePostgreSQL(elevePostgreSQL)
+                st.success("Résultat de l'élève enregistré sur PostgreSQL", icon="✅")
+                st.balloons()
+            else:
+                st.error('Veuillez sélectionner une "Matière PostgreSQL"', icon="🚨")
 
 with tabListeEleve:
-    st.title("Liste des Élèves")
+    st.title("Liste des Résultats")
     colListeMongoDB, colListePostgreSQL = st.columns(2)
 
     with colListeMongoDB:
@@ -112,7 +123,7 @@ with tabListeEleve:
         if elevesList:
             st.table([{"Nom": eleve['nom'], "Prénom": eleve['prenom'], "Note": eleve['note'], "Matière": getMatiereByIdMongoDB(eleve['matiere_id'])['intitule']} for eleve in elevesList])
         else:
-            st.warning("Aucun élève trouvé dans MongoDB", icon="⚠️")
+            st.warning("Aucun résultat trouvé dans MongoDB", icon="⚠️")
 
     with colListePostgreSQL:
         st.header("PostgreSQL")
@@ -121,7 +132,7 @@ with tabListeEleve:
         if eleves:
             st.table([{"Nom": eleve[0], "Prénom": eleve[1], "Note": eleve[2], "Matière": eleve[3]} for eleve in eleves]) 
         else:
-            st.warning("Aucun élève trouvé dans PostgreSQL", icon="⚠️")
+            st.warning("Aucun résultat trouvé dans PostgreSQL", icon="⚠️")
 
 with tabEnregistrerMatiere:
     st.title("Enregistrer une Matière")
