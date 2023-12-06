@@ -46,6 +46,7 @@ with tabEnregistrer:
             eleve = {'nom': nom, 'prenom': prenom, 'note': note}
             addMongoDB(eleve)
             st.success("Profil de l'élève enregistré sur MongoDB", icon="✅")
+            st.balloons()
     
     with colEnregistrerLesDeux:
         if st.button("Enregistrer sur les deux", type="primary", use_container_width=True):
@@ -53,12 +54,14 @@ with tabEnregistrer:
             addMongoDB(eleve)
             addPostgreSQL(eleve)
             st.success("Profil de l'élève enregistré sur MongoDB et PostgreSQL", icon="✅")
+            st.snow()
 
     with colEnregistrerPostgreSQL:
         if st.button("Enregistrer sur PostgreSQL", type="secondary", use_container_width=True):
             eleve = {'nom': nom, 'prenom': prenom, 'note': note}
             addPostgreSQL(eleve)
             st.success("Profil de l'élève enregistré sur PostgreSQL", icon="✅")
+            st.balloons()
         
 
 with tabListe:
@@ -83,6 +86,3 @@ with tabListe:
             st.table([{"Nom": eleve[1], "Prénom": eleve[2], "Note": eleve[3]} for eleve in eleves]) 
         else:
             st.warning("Aucun élève trouvé dans PostgreSQL", icon="⚠️")
-
-# st.balloons()
-# st.snow()
