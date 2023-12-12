@@ -6,7 +6,7 @@ CREATE TABLE matieres (
     prof VARCHAR(255)
 );
 
-CREATE TABLE eleves (
+CREATE TABLE resultats (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255),
     prenom VARCHAR(255),

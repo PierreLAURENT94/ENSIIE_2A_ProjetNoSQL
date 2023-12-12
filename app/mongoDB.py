@@ -3,14 +3,14 @@ from bson import ObjectId
 
 clientMongoDB = pymongo.MongoClient("mongodb://mongodb:27017/")
 
-def addEleveMongoDB(eleve):
+def addResultatMongoDB(resultat):
     db = clientMongoDB["app"]
-    collection = db["eleves"]
-    collection.insert_one(eleve)
+    collection = db["resultats"]
+    collection.insert_one(resultat)
 
-def getElevesMongoDB():
+def getResultatsMongoDB():
     db = clientMongoDB["app"]
-    collection = db["eleves"]
+    collection = db["resultats"]
     return collection.find()
 
 def addMatiereMongoDB(matiere):
