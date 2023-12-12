@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.12.1
  
 ENV HOST=0.0.0.0
  

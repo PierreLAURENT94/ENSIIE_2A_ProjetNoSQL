@@ -12,7 +12,7 @@ services:
       - postgres
 
   mongodb:
-    image: mongo
+    image: mongo:7.0.4
     ports:
       - "27017:27017"
 
@@ -24,6 +24,6 @@ services:
       - "5432:5432"
   
   adminer:
-    image: adminer
+    image: adminer:4.8.1
     ports:
       - "8050:8080"
