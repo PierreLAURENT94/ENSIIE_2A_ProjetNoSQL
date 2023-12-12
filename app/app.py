@@ -1,64 +1,6 @@
 import streamlit as st
-import pymongo
-import psycopg2
-from bson import ObjectId
-
-clientMongoDB = pymongo.MongoClient("mongodb://mongodb:27017/")
-
-clientPostgreSQL = psycopg2.connect(dbname="app", user="admin", password="123", host="postgres")
-
-def addEleveMongoDB(eleve):
-    db = clientMongoDB["app"]
-    collection = db["eleves"]
-    collection.insert_one(eleve)
-
-def addElevePostgreSQL(eleve):
-    cur = clientPostgreSQL.cursor()
-    cur.execute("""INSERT INTO eleves (nom, prenom, note, matiere_id) VALUES (%s, %s, %s, %s)""", (eleve['nom'], eleve['prenom'], eleve['note'], eleve['matiere_id']))
-    clientPostgreSQL.commit()
-    cur.close()
-
-def getElevesPostgreSQL():
-    cur = clientPostgreSQL.cursor()
-    cur.execute("SELECT nom, prenom, note, intitule FROM eleves LEFT JOIN matieres ON (matieres.id = eleves.matiere_id)")
-    eleves = cur.fetchall()
-    cur.close()
-    return eleves
-
-def getElevesMongoDB():
-    db = clientMongoDB["app"]
-    collection = db["eleves"]
-    return collection.find()
-
-def addMatiereMongoDB(matiere):
-    db = clientMongoDB["app"]
-    collection = db["matieres"]
-    collection.insert_one(matiere)
-
-def addMatierePostgreSQL(eleve):
-    cur = clientPostgreSQL.cursor()
-    cur.execute("""INSERT INTO matieres (intitule, prof) VALUES (%s, %s)""", (eleve['intitule'], eleve['prof']))
-    clientPostgreSQL.commit()
-    cur.close()
-
-def getMatieresPostgreSQL():
-    cur = clientPostgreSQL.cursor()
-    cur.execute("SELECT * FROM matieres")
-    eleves = cur.fetchall()
-    cur.close()
-    return eleves
-
-def getMatieresMongoDB():
-    db = clientMongoDB["app"]
-    collection = db["matieres"]
-    return collection.find()
-
-def getMatiereByIdMongoDB(id):
-    db = clientMongoDB["app"]
-    collection = db["matieres"]
-    return collection.find_one({'_id': ObjectId(id)})
-
-# Streamlit
+from mongoDB import *
+from postgreSQL import *
 
 tabEnregistrerEleve, tabListeEleve, tabEnregistrerMatiere, tabListeMatiere = st.tabs(["Enregistrer un Résultat", "Liste des Résultats", "Enregistrer une Matière", "Liste des Matières"])
 
