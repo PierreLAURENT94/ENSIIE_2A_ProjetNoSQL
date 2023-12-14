@@ -12,6 +12,8 @@ docker-compose up
 
 http://localhost:8080/
 
+*URL de l'application deployé : http://www.copains-a-bord.fr:8080/*
+
 ## Se connecter aux systemes de persistance
 
 ### MongoDB :
